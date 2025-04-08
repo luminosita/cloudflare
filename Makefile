@@ -4,4 +4,4 @@ plan:
 	tofu plan -out=cf.tfplan
 
 apply:
-	tofu apply cf.tfplan
+	tofu apply cf.tfplan 

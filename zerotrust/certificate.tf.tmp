@@ -1,4 +1,0 @@
-resource "cloudflare_zero_trust_gateway_certificate" "gateway_certificate" {
-  account_id = var.account_id
-  validity_period_days = 1826   #5 years
-}

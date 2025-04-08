@@ -1,3 +1,9 @@
+data "cloudflare_account" "account" {
+  filter = {
+    name = var.account_name
+  }
+}
+
 module "zone" {
   source = "./zone"
 
@@ -5,32 +11,8 @@ module "zone" {
     cloudflare = cloudflare
   }
 
-  zone_id = var.zone_id.kundun
-
-  ssl_setting = "strict"
-
-  dns_records = {
-    "kundun.dev" = {
-      type    = "A"
-      name    = "kundun.dev"
-      zone_id = var.zone_id.kundun
-      ttl     = 1
-
-      content = "109.245.66.169"
-
-      proxied = false
-    }
-    "test.kundun.dev" = {
-      type    = "CNAME"
-      name    = "test.kundun.dev"
-      zone_id = var.zone_id.kundun
-      ttl     = 1
-
-      content = "kundun.dev"
-
-      proxied = true
-    }
-  }
+  account_id = data.cloudflare_account.account.account_id
+  zone       = var.zone
 }
 
 module "zerotrust" {
@@ -40,26 +22,19 @@ module "zerotrust" {
     cloudflare = cloudflare
   }
 
-  account_id = var.account_id
-  zone_id    = var.zone_id.kundun
+  account_id = data.cloudflare_account.account.account_id
+  zone_id    = module.zone.result.id
 
-  access_group_name   = "Kundun"
-  access_group_domain = "kundun.dev"
+  access_group = var.access_group
 
-  tunnel_name                = "proxmox"
-  tunnel_network             = "192.168.60.0/24"
-  tunnel_network_description = "Proxmox"
+  tunnel              = var.tunnel
+  gateway_certificate = var.gateway_certificate
 
-  tunnel_ingress = [
-      {
-        hostname = "test.kundun.dev"
-        service  = "https://192.168.50.225"
-        origin_request = {
-          origin_server_name = "test.kundun.dev"
-        }
-      },
-      {
-        service = "http_status:404"
-      }
-    ]
+  idp = var.idp
+
+  warp_client = var.warp_client
+
+  fallback_domains = var.fallback_domains
+
+  device_default_profile = var.device_default_profile
 }
