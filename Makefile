@@ -5,3 +5,6 @@ plan:
 
 apply:
 	tofu apply cf.tfplan 
+
+plan-destroy:
+	tofu plan -destroy -out=cf.tfplan

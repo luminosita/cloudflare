@@ -21,11 +21,10 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "tunnel_config" {
     }
 }
 
-#FIXME: Add route
-# resource "cloudflare_zero_trust_tunnel_cloudflared_route" "tunnel_route" {
-#   account_id = var.account_id
-#   tunnel_id = cloudflare_zero_trust_tunnel_cloudflared.tunnel.id
+resource "cloudflare_zero_trust_tunnel_cloudflared_route" "tunnel_route" {
+  account_id = var.account_id
+  tunnel_id = cloudflare_zero_trust_tunnel_cloudflared.tunnel.id
 
-#   network = var.tunnel.network.cidr
-#   comment = var.tunnel.network.description
-# }
+  network = var.tunnel.network.cidr
+  comment = var.tunnel.network.description
+}
