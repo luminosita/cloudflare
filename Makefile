@@ -1,7 +1,7 @@
 include common.mk
 
 plan:
-	terraform plan -out=cf.tfplan
+	tofu plan -out=cf.tfplan
 
 apply:
-	terraform apply cf.tfplan
+	tofu apply cf.tfplan

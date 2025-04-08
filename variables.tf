@@ -7,5 +7,9 @@ variable "account_id" {
 }
 
 variable "zone_id" {
-    type = string
+    type = object({
+        kundun = string
+        emisia = string
+    })
 }
+

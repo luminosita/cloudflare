@@ -1,0 +1,85 @@
+data "cloudflare_zero_trust_access_identity_providers" "idps" {
+  account_id = var.account_id
+}
+
+data "cloudflare_zero_trust_access_policies" "access_policies" {
+  account_id = var.account_id
+}
+
+resource "cloudflare_zero_trust_access_group" "group" {
+  zone_id = var.zone_id
+  name    = var.access_group_name
+
+  is_default = true
+
+  include = [{
+    email_domain = {
+      domain = var.access_group_domain
+    }
+  }]
+}
+
+resource "cloudflare_zero_trust_access_application" "application" {
+  account_id = var.account_id
+
+  allow_authenticate_via_warp = tobool(null)
+  allowed_idps = tolist([
+    data.idps.result[0].id,  #onetimepin
+  ])
+  auto_redirect_to_identity = false
+  domain                    = "emisia.cloudflareaccess.com/warp"
+  name                      = "Warp Login App"
+  policies = tolist([
+    {
+      "decision" = "allow"
+      "include" = tolist([
+        {
+          "group" = {
+            "id" = "15b5bd46-1cb0-41f6-a906-36fd6911071c"
+          }
+        },
+      ])
+      "name"       = "Emails"
+      "precedence" = 1
+    },
+  ])
+  session_duration = "24h"
+  type             = "warp"
+
+}
+
+resource "cloudflare_zero_trust_device_default_profile" "default_profile" {
+    account_id = var.account_id
+    allow_mode_switch = false
+    allow_updates = false
+    allowed_to_leave = true
+    auto_connect = 0
+    captive_portal = 180
+    default = true
+    disable_auto_fallback = false
+    enabled = true
+    exclude_office_ips = false
+
+    include = tolist([
+      {
+        "address" = "192.168.50.0/24"
+      },
+    ])
+    register_interface_ip_with_dns = true
+    service_mode_v2 = {
+      "mode" = "warp"
+    }
+    support_url = ""
+    switch_locked = false
+    tunnel_protocol = "wireguard"
+}
+
+resource "cloudflare_zero_trust_device_custom_profile_local_domain_fallback" "custom_fallback_domain" {
+    account_id = var.account_id
+  policy_id = var.access_policies.result[0].id
+    suffix = "lan"
+    description = "Mikrotik"
+    dns_server = tolist([
+          "192.168.50.1",
+        ])
+}

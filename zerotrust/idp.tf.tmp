@@ -1,0 +1,16 @@
+resource "cloudflare_zero_trust_access_identity_provider" "idp" {
+  config = {
+    auth_url                   = "https://auth.emisia.net/realms/emisia/protocol/openid-connect/auth"
+    certs_url                  = "https://auth.emisia.net/realms/emisia/protocol/openid-connect/certs"
+    client_id                  = "cloudflare"
+    scopes = tolist([
+      "openid",
+      "email",
+      "profile",
+    ])
+    token_url      = "https://auth.emisia.net/realms/emisia/protocol/openid-connect/token"
+  }
+
+  name = "OpenID Connect"
+  type = "oidc"
+}
