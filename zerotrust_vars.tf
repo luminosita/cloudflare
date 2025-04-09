@@ -43,8 +43,8 @@ variable "warp" {
 
     fallback_domains = list(object({
       suffix      = string
-      description = string
-      dns_server  = list(string)
+      description = optional(string)
+      dns_server  = optional(list(string))
     }))
 
     device_default_profile = object({

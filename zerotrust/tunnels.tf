@@ -22,6 +22,8 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "tunnel_config" {
 }
 
 resource "cloudflare_zero_trust_tunnel_cloudflared_route" "tunnel_route" {
+  depends_on = [ cloudflare_zero_trust_tunnel_cloudflared_config.tunnel_config ]
+  
   account_id = var.account_id
   tunnel_id = cloudflare_zero_trust_tunnel_cloudflared.tunnel.id
 

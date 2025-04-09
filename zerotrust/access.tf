@@ -42,6 +42,8 @@ resource "cloudflare_zero_trust_access_application" "warp_client" {
 }
 
 resource "cloudflare_zero_trust_device_default_profile" "warp_default_profile" {
+  depends_on = [ cloudflare_zero_trust_access_application.warp_client ]
+
   account_id            = var.account_id
   
   allow_mode_switch     = false
@@ -63,8 +65,10 @@ resource "cloudflare_zero_trust_device_default_profile" "warp_default_profile" {
 }
 
 #FIXME: Bug -> See TODO.md
-# resource "cloudflare_zero_trust_device_default_profile_local_domain_fallback" "warp_fallback_domain" {
-#   account_id = var.account_id
+resource "cloudflare_zero_trust_device_default_profile_local_domain_fallback" "warp_fallback_domain" {
+  depends_on = [ cloudflare_zero_trust_device_default_profile.warp_default_profile ]
 
-#   domains = var.warp.fallback_domains
-# }
+  account_id = var.account_id
+
+  domains = var.warp.fallback_domains
+}
