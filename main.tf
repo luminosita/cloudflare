@@ -32,9 +32,5 @@ module "zerotrust" {
 
   idp = var.idp
 
-  warp_client = var.warp_client
-
-  fallback_domains = var.fallback_domains
-
-  device_default_profile = var.device_default_profile
+  warp = var.warp
 }

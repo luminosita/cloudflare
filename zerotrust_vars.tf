@@ -1,3 +1,9 @@
+variable "gateway_certificate" {
+  type = object({
+    validity_period_days = number
+  })
+}
+
 variable "access_group" {
   type = object({
     name = string
@@ -31,9 +37,23 @@ variable "tunnel" {
   })
 }
 
-variable "gateway_certificate" {
+variable "warp" {
   type = object({
-    validity_period_days = number
+    domain = string
+
+    fallback_domains = list(object({
+      suffix      = string
+      description = string
+      dns_server  = list(string)
+    }))
+
+    device_default_profile = object({
+      split_include = list(object({
+        address     = string
+        description = string
+        host        = optional(string)
+      }))
+    })
   })
 }
 
@@ -55,26 +75,4 @@ variable "idp" {
   sensitive = true
 }
 
-variable "warp_client" {
-  type = object({
-    domain = string
-  })
-}
 
-variable "fallback_domains" {
-  type = list(object({
-    suffix = string
-    description = string
-    dns_server = list(string)
-  }))
-}
-
-variable "device_default_profile" {
-  type = object({
-    split_include = list(object({
-      address = string
-      description = string
-      host = optional(string)
-    }))
-  })
-}

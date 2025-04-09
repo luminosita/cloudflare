@@ -34,14 +34,14 @@ resource "cloudflare_zero_trust_access_application" "warp_client" {
     },
   ])
   
-  domain = var.warp_client.domain
+  domain = var.warp.domain
 
   name   = "Warp Login App"
   session_duration = "24h"
   type             = "warp"
 }
 
-resource "cloudflare_zero_trust_device_default_profile" "default_profile" {
+resource "cloudflare_zero_trust_device_default_profile" "warp_default_profile" {
   account_id            = var.account_id
   
   allow_mode_switch     = false
@@ -59,11 +59,11 @@ resource "cloudflare_zero_trust_device_default_profile" "default_profile" {
   }
   tunnel_protocol = "wireguard"
 
-  include = var.device_default_profile.split_include
+  include = var.warp.device_default_profile.split_include
 }
 
-resource "cloudflare_zero_trust_device_default_profile_local_domain_fallback" "fallback_domain" {
+resource "cloudflare_zero_trust_device_default_profile_local_domain_fallback" "warp_fallback_domain" {
   account_id = var.account_id
 
-  domains = var.fallback_domains
+  domains = var.warp.fallback_domains
 }
