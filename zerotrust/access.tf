@@ -62,8 +62,9 @@ resource "cloudflare_zero_trust_device_default_profile" "warp_default_profile" {
   include = var.warp.device_default_profile.split_include
 }
 
-resource "cloudflare_zero_trust_device_default_profile_local_domain_fallback" "warp_fallback_domain" {
-  account_id = var.account_id
+#FIXME: Bug -> See TODO.md
+# resource "cloudflare_zero_trust_device_default_profile_local_domain_fallback" "warp_fallback_domain" {
+#   account_id = var.account_id
 
-  domains = var.warp.fallback_domains
-}
+#   domains = var.warp.fallback_domains
+# }
