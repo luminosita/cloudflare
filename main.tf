@@ -1,6 +1,6 @@
 data "cloudflare_account" "account" {
   filter = {
-    name = var.account_name
+    name = var.account_info.name
   }
 }
 
@@ -27,10 +27,10 @@ module "zerotrust" {
 
   access_group = var.access_group
 
-  tunnel              = var.tunnel
-  gateway_certificate = var.gateway_certificate
+  tunnel              = local.tunnel
+  gateway_certificate = local.gateway_certificate
 
   idp = var.idp
 
-  warp = var.warp
+  warp = local.warp
 }

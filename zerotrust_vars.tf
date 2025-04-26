@@ -18,6 +18,17 @@ variable "access_group" {
   })
 }
 
+variable "tunnel_ingress" {
+  type = list(
+    object({
+      hostname = optional(string)
+      service  = string
+      origin_request = optional(object({
+        origin_server_name = optional(string)
+      }))
+  }))
+}
+
 variable "tunnel" {
   type = object({
     name = string
@@ -25,15 +36,6 @@ variable "tunnel" {
       cidr        = string
       description = string
     })
-
-    ingress = list(
-      object({
-        hostname = optional(string)
-        service  = string
-        origin_request = optional(object({
-          origin_server_name = optional(string)
-        }))
-    }))
   })
 }
 

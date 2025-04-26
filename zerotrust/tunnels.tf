@@ -5,27 +5,27 @@ resource "random_password" "tunnel_secret" {
 resource "cloudflare_zero_trust_tunnel_cloudflared" "tunnel" {
   account_id = var.account_id
   name       = var.tunnel.name
-  tunnel_secret     = base64sha256(random_password.tunnel_secret.result)
+  secret     = base64sha256(random_password.tunnel_secret.result)
 }
 
 resource "cloudflare_zero_trust_tunnel_cloudflared_config" "tunnel_config" {
   account_id = var.account_id
-  tunnel_id = cloudflare_zero_trust_tunnel_cloudflared.tunnel.id
+  tunnel_id  = cloudflare_zero_trust_tunnel_cloudflared.tunnel.id
 
   config = {
-      ingress = var.tunnel.ingress
+    ingress = var.tunnel_ingress
 
-      warp_routing = {
-        enabled = true
-      }
+    warp_routing = {
+      enabled = true
     }
+  }
 }
 
 resource "cloudflare_zero_trust_tunnel_cloudflared_route" "tunnel_route" {
-  depends_on = [ cloudflare_zero_trust_tunnel_cloudflared_config.tunnel_config ]
-  
+  depends_on = [cloudflare_zero_trust_tunnel_cloudflared_config.tunnel_config]
+
   account_id = var.account_id
-  tunnel_id = cloudflare_zero_trust_tunnel_cloudflared.tunnel.id
+  tunnel_id  = cloudflare_zero_trust_tunnel_cloudflared.tunnel.id
 
   network = var.tunnel.network.cidr
   comment = var.tunnel.network.description
