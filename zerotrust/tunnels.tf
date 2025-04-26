@@ -3,9 +3,9 @@ resource "random_password" "tunnel_secret" {
 }
 
 resource "cloudflare_zero_trust_tunnel_cloudflared" "tunnel" {
-  account_id = var.account_id
-  name       = var.tunnel.name
-  secret     = base64sha256(random_password.tunnel_secret.result)
+  account_id    = var.account_id
+  name          = var.tunnel.name
+  tunnel_secret = base64sha256(random_password.tunnel_secret.result)
 }
 
 resource "cloudflare_zero_trust_tunnel_cloudflared_config" "tunnel_config" {

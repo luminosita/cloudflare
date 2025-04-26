@@ -3,6 +3,7 @@ terraform*
 *.tfplan
 *.auto.tfvars
 *.tfstate
+*.bak
 
 tmp/
 
