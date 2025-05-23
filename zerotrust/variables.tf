@@ -12,16 +12,6 @@ variable "gateway_certificate" {
   })
 }
 
-variable "tunnel" {
-  type = object({
-    name = string
-    network = object({
-      cidr        = string
-      description = string
-    })
-  })
-}
-
 variable "warp" {
   type = object({
     domain = string

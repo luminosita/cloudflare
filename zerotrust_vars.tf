@@ -12,14 +12,19 @@ variable "access_group" {
   })
 }
 
-variable "tunnel_ingress" {
-  type = list(
-    object({
+variable "tunnels" {
+  type = map(object({
+    network = object({
+      cidr        = string
+      description = string
+    })
+    tunnel_ingress = list(object({
       hostname = optional(string)
       service  = string
       origin_request = optional(object({
         origin_server_name = optional(string)
       }))
+    }))
   }))
 }
 

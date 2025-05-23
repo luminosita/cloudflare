@@ -6,9 +6,7 @@ variable "account_info" {
   type = object({
     name        = string
     warp_domain = string
-    network     = string
     dns_server  = string
-    tunnel_name = string
   })
 }
 
@@ -27,11 +25,11 @@ locals {
     ]
 
     device_default_profile = {
-      split_include = [
+      split_include = [ for k,v in var.tunnels : 
         {
-          address     = var.account_info.network
+          address     = v.network.cidr
           description = ""
-        },
+        }
       ]
     }
   }
@@ -39,14 +37,5 @@ locals {
   gateway_certificate = {
     validity_period_days = 1826
   }
-
-  tunnel = {
-    name = var.account_info.tunnel_name
-    network = {
-      cidr        = var.account_info.network
-      description = "Intranet Tunnel"
-    }
-  }
-
 }
 

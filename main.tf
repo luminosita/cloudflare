@@ -27,8 +27,7 @@ module "zerotrust" {
 
   access_group = var.access_group
 
-  tunnel              = local.tunnel
-  tunnel_ingress      = var.tunnel_ingress
+  tunnels             = var.tunnels
   gateway_certificate = local.gateway_certificate
 
   idp = var.idp
